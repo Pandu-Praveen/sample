@@ -53,7 +53,7 @@ export default function Dashboard() {
             >
               <CardHeader>
                 <CardTitle className="font-semibold text-sm">
-                  Create project {index + 1}
+                  PS - {index + 1}
                 </CardTitle>
               </CardHeader>
               <CardContent>

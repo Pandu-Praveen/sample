@@ -12,7 +12,7 @@ export type ThemeProviderState = {
 }
 
 const initialState = {
-    theme: "system",
+    theme: "light", // Default to light theme
     setTheme: () => null,
 }
 
@@ -20,38 +20,29 @@ export const ThemeProviderContext = createContext<ThemeProviderState>(initialSta
 
 export function ThemeProvider({
     children,
-    defaultTheme = "system",
+    defaultTheme = "light", // Default theme is light
     storageKey = "shadcn-ui-theme",
     ...props
 }: ThemeProviderProps) {
-    const [theme, setTheme] = useState(
-        () => localStorage.getItem(storageKey) ?? defaultTheme
-    )
+    const [theme, setTheme] = useState(() => localStorage.getItem(storageKey) ?? defaultTheme)
 
     useEffect(() => {
         const root = window.document.documentElement
 
+        // Remove any previous theme classes
         root.classList.remove("light", "dark")
 
-        if (theme === "system") {
-            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-                .matches
-                ? "dark"
-                : "light"
-
-            root.classList.add(systemTheme)
-            return
-        }
-
-        root.classList.add(theme)
+        // Always set the theme to light
+        root.classList.add("light")
     }, [theme])
 
     return (
         <ThemeProviderContext.Provider {...props} value={{
             theme,
             setTheme: (theme: string) => {
-                localStorage.setItem(storageKey, theme)
-                setTheme(theme)
+                // Ensure the theme is set to light and stored
+                localStorage.setItem(storageKey, "light")
+                setTheme("light")
             },
         }}>
             {children}

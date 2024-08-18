@@ -7,7 +7,7 @@ interface AppConfig {
 }
 
 export const appConfig: AppConfig = {
-  name: "Komatsu",
+  name: "Hello Karthi",
   github: {
     title: "Shadcn Sample",
     url: "https://github.com/",

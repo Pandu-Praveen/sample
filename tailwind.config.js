@@ -17,11 +17,14 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Poppins", "sans-serif"], // Set Poppins as the default sans-serif font
+      },
       colors: {
+        background: "#F2F2F7", // Set default background color
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",

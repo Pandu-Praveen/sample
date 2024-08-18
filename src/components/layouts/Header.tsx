@@ -31,13 +31,13 @@ export function Header() {
   const location = useLocation();
 
   return (
-    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur">
-      <div className="container px-4 md:px-8 flex h-14 items-center">
+    <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur ">
+      <div className="container px-4 md:px-8 flex h-14 items-center ">
         <div className="mr-4 hidden md:flex">
           <NavLink to="/" className="mr-6 flex items-center space-x-2">
             <Logo />
           </NavLink>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
+          {/* <nav className="flex items-center space-x-6 text-sm font-medium">
             {mainMenu.map((menu, index) =>
               menu.items !== undefined ? (
                 <DropdownMenu key={index}>
@@ -96,18 +96,18 @@ export function Header() {
                 </NavLink>
               )
             )}
-          </nav>
+          </nav> */}
         </div>
         {/* mobile */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
-            <Button
+            {/* <Button
               variant="ghost"
               className="mr-4 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
             >
               <ViewVerticalIcon className="h-5 w-5" />
               <span className="sr-only">Toggle Menu</span>
-            </Button>
+            </Button> */}
           </SheetTrigger>
           <SheetContent side="left" className="pr-0 sm:max-w-xs">
             <NavLink
@@ -115,7 +115,7 @@ export function Header() {
               onClick={() => setOpen(false)}
               className="flex items-center space-x-2"
             >
-              <Logo />
+              {/* <Logo /> */}
             </NavLink>
             <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-8 pl-8">
               <Accordion
@@ -205,8 +205,11 @@ export function Header() {
           </SheetContent>
         </Sheet>
         <a href="/" className="mr-6 flex items-center space-x-2 md:hidden">
-          <Icons.logo className="h-6 w-6" />
-          <span className="font-bold inline-block">{appConfig.name}</span>
+          {/* <Icons.logo className="h-6 w-6" /> */}{" "}
+          <NavLink to="/" className="mr-6 flex items-center space-x-2">
+            <Logo />
+          </NavLink>
+          {/* <span className="font-bold inline-block">{appConfig.name}</span> */}
         </a>
         {/* right */}
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
@@ -214,8 +217,68 @@ export function Header() {
             {/* <CommandMenu /> */}
           </div>
           <nav className="flex items-center space-x-2">
-            <ModeToggle />
-            <DropdownMenu>
+            {/* <ModeToggle /> */}
+            <nav className="flex items-center space-x-6 text-sm font-medium">
+              {mainMenu.map((menu, index) =>
+                menu.items !== undefined ? (
+                  <DropdownMenu key={index}>
+                    <DropdownMenuTrigger
+                      className={cn(
+                        "flex items-center py-1 focus:outline-none text-sm font-medium transition-colors hover:text-primary",
+                        menu.items
+                          .filter((subitem) => subitem.to !== undefined)
+                          .map((subitem) => subitem.to)
+                          .includes(location.pathname)
+                          ? "text-foreground"
+                          : "text-foreground/60"
+                      )}
+                    >
+                      {menu.title}
+                      <ChevronDownIcon className="ml-1 -mr-1 h-3 w-3 text-muted-foreground" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      className="w-48"
+                      align="start"
+                      forceMount
+                    >
+                      {menu.items.map((subitem, subindex) =>
+                        subitem.to !== undefined ? (
+                          <NavLink key={subindex} to={subitem.to}>
+                            <DropdownMenuItem
+                              className={cn("hover:cursor-pointer", {
+                                "bg-muted": subitem.to === location.pathname,
+                              })}
+                            >
+                              {subitem.title}
+                            </DropdownMenuItem>
+                          </NavLink>
+                        ) : subitem.label ? (
+                          <DropdownMenuLabel key={subindex}>
+                            {subitem.title}
+                          </DropdownMenuLabel>
+                        ) : (
+                          <DropdownMenuSeparator key={subindex} />
+                        )
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <NavLink
+                    key={index}
+                    to={menu.to ?? ""}
+                    className={({ isActive }) =>
+                      cn(
+                        "text-sm font-medium transition-colors hover:text-primary",
+                        isActive ? "text-foreground" : "text-foreground/60"
+                      )
+                    }
+                  >
+                    {menu.title}
+                  </NavLink>
+                )
+              )}
+            </nav>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
@@ -229,16 +292,18 @@ export function Header() {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">KOMATSU</p>
+                    <p className="text-sm font-medium leading-none">
+                      Hello Karthi
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      m@komatsu.com
+                      abc@domain.com
                     </p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Log out</DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
           </nav>
         </div>
       </div>

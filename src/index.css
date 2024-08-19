@@ -84,3 +84,11 @@
     @apply bg-background text-foreground;
   }
 }
+/* Add this CSS to your stylesheet */
+.glassmorphic-header {
+  background: rgba(255, 255, 255, 0.3); /* Transparent white background */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Light border for glass effect */
+  backdrop-filter: blur(10px); /* Apply blur effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari */
+  border-radius: 10px; /* Optional: rounded corners */
+}

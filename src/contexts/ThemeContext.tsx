@@ -1,60 +1,57 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useState } from "react";
 
 type ThemeProviderProps = {
-    children: React.ReactNode
-    defaultTheme?: string
-    storageKey?: string
-}
+  children: React.ReactNode;
+  defaultTheme?: string;
+  storageKey?: string;
+};
 
 export type ThemeProviderState = {
-    theme: string
-    setTheme: (theme: string) => void
-}
+  theme: string;
+  setTheme: (theme: string) => void;
+};
 
 const initialState = {
-    theme: "system",
-    setTheme: () => null,
-}
+  theme: "light", // Default to light theme
+  setTheme: () => null,
+};
 
-export const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
+export const ThemeProviderContext =
+  createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
-    children,
-    defaultTheme = "system",
-    storageKey = "shadcn-ui-theme",
-    ...props
+  children,
+  defaultTheme = "light", // Default theme is light
+  storageKey = "shadcn-ui-theme",
+  ...props
 }: ThemeProviderProps) {
-    const [theme, setTheme] = useState(
-        () => localStorage.getItem(storageKey) ?? defaultTheme
-    )
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem(storageKey) ?? defaultTheme
+  );
 
-    useEffect(() => {
-        const root = window.document.documentElement
+  useEffect(() => {
+    const root = window.document.documentElement;
 
-        root.classList.remove("light", "dark")
+    // Remove any previous theme classes
+    root.classList.remove("light", "dark");
 
-        if (theme === "system") {
-            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-                .matches
-                ? "dark"
-                : "light"
+    // Always set the theme to light
+    root.classList.add("light");
+  }, [theme]);
 
-            root.classList.add(systemTheme)
-            return
-        }
-
-        root.classList.add(theme)
-    }, [theme])
-
-    return (
-        <ThemeProviderContext.Provider {...props} value={{
-            theme,
-            setTheme: (theme: string) => {
-                localStorage.setItem(storageKey, theme)
-                setTheme(theme)
-            },
-        }}>
-            {children}
-        </ThemeProviderContext.Provider>
-    )
+  return (
+    <ThemeProviderContext.Provider
+      {...props}
+      value={{
+        theme,
+        setTheme: (theme: string) => {
+          // Ensure the theme is set to light and stored
+          localStorage.setItem(storageKey, "light");
+          setTheme("light");
+        },
+      }}
+    >
+      {children}
+    </ThemeProviderContext.Provider>
+  );
 }

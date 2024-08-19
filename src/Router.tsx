@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Widgets from "./pages/Widgets";
 import Components from "./pages/Components";
+import Notification from "./pages/Notification";
 import { Profile } from "./pages/Profile";
 import { SecondaryChart } from "./pages/SecondaryChart";
 import { Settings } from "./pages/Settings";
@@ -71,6 +72,10 @@ export const router = createHashRouter([
       {
         path: "settings",
         element: <Settings />,
+      },
+      {
+        path: "notification",
+        element: <Notification />,
       },
     ],
   },

@@ -52,7 +52,7 @@ export function Footer() {
           />
         </svg>
       </a>
-      <a href="#" className="text-center">
+      <a href="/#/notification" className="text-center">
         <svg
           width="18"
           height="21"

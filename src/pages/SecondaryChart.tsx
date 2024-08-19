@@ -22,6 +22,18 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 const chartData24hrs = [
   { time: "9 am", desktop: 186 },
@@ -54,6 +66,15 @@ const chartConfig = {
 
 export function SecondaryChart() {
   const [selectedTab, setSelectedTab] = useState("24hrs");
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleDownloadClick = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   return (
     <Card className="w-full max-w-lg mx-auto p-4 bg-white rounded-md shadow-md">
@@ -160,12 +181,7 @@ export function SecondaryChart() {
                   cursor={false}
                   content={<ChartTooltipContent hideLabel />}
                 />
-                <Bar
-                  dataKey="desktop"
-                  fill="var(--color-desktop)"
-                  radius={8}
-                  barSize={30}
-                >
+                <Bar dataKey="desktop" fill="#007bff" radius={8} barSize={30}>
                   <LabelList
                     position="top"
                     offset={12}
@@ -185,9 +201,33 @@ export function SecondaryChart() {
             : "showing details for Last 10 days"}{" "}
           <TrendingUp className="h-4 w-4 inline" />
         </div>
-        <button className="mt-4 bg-gray-200 text-gray-600 px-4 py-2 rounded-md">
-          Download previous data
-        </button>
+        <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
+          <AlertDialogTrigger asChild>
+            <button
+              className="mt-4 bg-gray-200 text-gray-600 px-4 py-2 rounded-md"
+              onClick={handleDownloadClick}
+            >
+              Download previous data
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action will download the previous data. Please confirm your
+                action.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleCloseDialog}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={handleCloseDialog}>
+                Download
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
       <br />
     </Card>

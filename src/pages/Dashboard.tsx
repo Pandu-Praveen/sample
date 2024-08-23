@@ -261,7 +261,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </div>
-
+          <br/><br/>
           {/* Watchlist Card */}
           {/* <WatchlistCard /> */}
         </>

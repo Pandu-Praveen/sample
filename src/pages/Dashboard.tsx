@@ -139,12 +139,14 @@ const WatchlistCard = () => {
 };
 
 const Dashboard = () => {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const handleCardClick = (index) => {
+
+  const handleCardClick = (index: number) => {
     console.log("Selected Index:", index); // Log the selected index
     setSelectedIndex(index);
   };
+  
   const backtomainpage = () => {
     setSelectedIndex(null);
   }
@@ -299,7 +301,7 @@ const Dashboard = () => {
                     />
                    <Area
                       dataKey= {`${dataConfigs[selectedIndex].dataKey}`}
-                      type={`${dataConfigs[selectedIndex].type}`}
+                      type='natural'
                       fill={`${dataConfigs[selectedIndex].fill}`}
                       fillOpacity={`${dataConfigs[selectedIndex].fillOpacity}`}
                       stroke={`${dataConfigs[selectedIndex].stroke}`}

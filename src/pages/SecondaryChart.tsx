@@ -55,6 +55,16 @@ const chartData10days = [
   { day: "Day 8", desktop: 900 },
   { day: "Day 9", desktop: 750 },
   { day: "Day 10", desktop: 850 },
+  // { day: "Day 11", desktop: 300 },
+  // { day: "Day 12", desktop: 450 },
+  // { day: "Day 13", desktop: 500 },
+  // { day: "Day 14", desktop: 600 },
+  // { day: "Day 15", desktop: 700 },
+  // { day: "Day 16", desktop: 650 },
+  // { day: "Day 17", desktop: 800 },
+  // { day: "Day 18", desktop: 900 },
+  // { day: "Day 19", desktop: 750 },
+  // { day: "Day 20", desktop: 850 },
 ];
 
 const chartConfig = {
@@ -131,7 +141,7 @@ export function SecondaryChart() {
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
+                  content={<ChartTooltipContent indicator="line" />}
                 />
                 <Bar
                   dataKey="desktop"
@@ -179,7 +189,7 @@ export function SecondaryChart() {
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
+                  content={<ChartTooltipContent indicator="line" />}
                 />
                 <Bar dataKey="desktop" fill="#007bff" radius={8} barSize={30}>
                   <LabelList

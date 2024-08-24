@@ -43,6 +43,20 @@ interface TransformedData {
   voltageSensor: number;
 }
 
+interface ChartData24hrs {
+  time: number; // or string if you plan to use a different format
+  pressureSensor: number;
+  voltageSensor: number;
+  currentSensor: number;
+  power: number;
+  energy: number;
+  oilPressureInlet: number;
+  oilPressureOutlet: number;
+  airFilterVacuumPressure: number;
+  drainValvePressureOutlet: number;
+}
+
+
 
 const data =[
   
@@ -94,17 +108,226 @@ const data =[
   oilTemperatureSensor: 87,
   voltageSensor: 429
 },
+{
+  timestamp: '2024-08-24 12:40:11', 
+  airFilterVacuumPressure: 29.8, 
+  currentSensor: 10, 
+  dischargePressureSensor: 12.5, 
+  drainValvePressureOutlet: 0.5,
+  machine: 1,
+  oilPressureInlet: 30.2,
+  oilPressureOutlet: 28.9,
+  oilTemperatureSensor: 150,
+  voltageSensor: 120
+},
+{
+  timestamp: '2024-08-24 12:50:38', 
+  airFilterVacuumPressure: 700, 
+  currentSensor: 56, 
+  dischargePressureSensor: 577, 
+  drainValvePressureOutlet: 693,
+  machine: 1,
+  oilPressureInlet: 15005,
+  oilPressureOutlet: 5090,
+  oilTemperatureSensor: 53,
+  voltageSensor: 156
+},
+{
+  timestamp: '2024-08-24 12:59:52', 
+  airFilterVacuumPressure: 181, 
+  currentSensor: 32, 
+  dischargePressureSensor: 522, 
+  drainValvePressureOutlet: 478,
+  machine: 1,
+  oilPressureInlet: 5834,
+  oilPressureOutlet: 6100,
+  oilTemperatureSensor: 134,
+  voltageSensor: 207
+},
+{
+  timestamp: '2024-08-24 13:00:54', 
+  airFilterVacuumPressure: 1483, 
+  currentSensor: 24, 
+  dischargePressureSensor: 680, 
+  drainValvePressureOutlet: 1538,
+  machine: 1,
+  oilPressureInlet: 9196,
+  oilPressureOutlet: 13852,
+  oilTemperatureSensor: 87,
+  voltageSensor: 429
+},
+{
+  timestamp: '2024-08-24 13:11:11', 
+  airFilterVacuumPressure: 29.8, 
+  currentSensor: 10, 
+  dischargePressureSensor: 12.5, 
+  drainValvePressureOutlet: 0.5,
+  machine: 1,
+  oilPressureInlet: 30.2,
+  oilPressureOutlet: 28.9,
+  oilTemperatureSensor: 150,
+  voltageSensor: 120
+},
+{
+  timestamp: '2024-08-24 13:20:38', 
+  airFilterVacuumPressure: 700, 
+  currentSensor: 56, 
+  dischargePressureSensor: 577, 
+  drainValvePressureOutlet: 693,
+  machine: 1,
+  oilPressureInlet: 15005,
+  oilPressureOutlet: 5090,
+  oilTemperatureSensor: 53,
+  voltageSensor: 156
+},
+{
+  timestamp: '2024-08-24 13:30:52', 
+  airFilterVacuumPressure: 181, 
+  currentSensor: 32, 
+  dischargePressureSensor: 522, 
+  drainValvePressureOutlet: 478,
+  machine: 1,
+  oilPressureInlet: 5834,
+  oilPressureOutlet: 6100,
+  oilTemperatureSensor: 134,
+  voltageSensor: 207
+},
+{
+  timestamp: '2024-08-24 13:50:54', 
+  airFilterVacuumPressure: 1483, 
+  currentSensor: 24, 
+  dischargePressureSensor: 680, 
+  drainValvePressureOutlet: 1538,
+  machine: 1,
+  oilPressureInlet: 9196,
+  oilPressureOutlet: 13852,
+  oilTemperatureSensor: 87,
+  voltageSensor: 429
+},
+{
+  timestamp: '2024-08-24 14:00:11', 
+  airFilterVacuumPressure: 29.8, 
+  currentSensor: 10, 
+  dischargePressureSensor: 12.5, 
+  drainValvePressureOutlet: 0.5,
+  machine: 1,
+  oilPressureInlet: 30.2,
+  oilPressureOutlet: 28.9,
+  oilTemperatureSensor: 150,
+  voltageSensor: 120
+},
+{
+  timestamp: '2024-08-24 14:15:38', 
+  airFilterVacuumPressure: 700, 
+  currentSensor: 56, 
+  dischargePressureSensor: 577, 
+  drainValvePressureOutlet: 693,
+  machine: 1,
+  oilPressureInlet: 15005,
+  oilPressureOutlet: 5090,
+  oilTemperatureSensor: 53,
+  voltageSensor: 156
+},
+{
+  timestamp: '2024-08-24 14:30:52', 
+  airFilterVacuumPressure: 181, 
+  currentSensor: 32, 
+  dischargePressureSensor: 522, 
+  drainValvePressureOutlet: 478,
+  machine: 1,
+  oilPressureInlet: 5834,
+  oilPressureOutlet: 6100,
+  oilTemperatureSensor: 134,
+  voltageSensor: 207
+},
+{
+  timestamp: '2024-08-24 14:40:54', 
+  airFilterVacuumPressure: 1483, 
+  currentSensor: 24, 
+  dischargePressureSensor: 680, 
+  drainValvePressureOutlet: 1538,
+  machine: 1,
+  oilPressureInlet: 9196,
+  oilPressureOutlet: 13852,
+  oilTemperatureSensor: 87,
+  voltageSensor: 429
+},
 ]
+const tenDaysInMs = 10 * 24 * 60 * 60 * 1000;
+const oneDayInMs= 24 * 60 * 60 * 1000;
+const currtimehr: number = new Date("2024-08-24T14:40:54").getHours();
+const currtime = new Date("2024-08-24T14:40:54").getTime();
+let ps=0,vs=0,cs=0,p=0,e=0,opi=0,opo=0,afvp=0,dvpo=0;
+let psd=0,vsd=0,csd=0,pd=0,ed=0,opid=0,opod=0,afvpd=0,dvpod=0;
+const chartData24hrs: ChartData24hrs[] = [];
+const chartData10days=[];
+const hrsdiff=60*60*1000;
+let flag=1; 
+async function calculatingdata(){
+  for (let i=data.length -1;i>=0;i--){
+    let j=0;
+    const currdatatime = new Date(data[i].timestamp.replace(" ","T")).getTime();
+    const timediff=currtime-currdatatime;
+    if(timediff<=oneDayInMs){
+      console.log()
+      if(hrsdiff*flag>=currtime-currdatatime){
+        ps+=data[i].dischargePressureSensor;
+        vs+=data[i].voltageSensor;
+        cs+=data[i].currentSensor;
+        let cp=(1.732*data[i].voltageSensor*data[i].currentSensor*0.8)/1000;
+        let elapsedTime;
+        if(i-1>0){
+          elapsedTime = new Date(data[i].timestamp.replace(" ","T")).getTime()-(new Date(data[i-1].timestamp.replace(" ","T")).getTime());
+        }
+        else{
+          elapsedTime=0;
+        }
+        p+=cp;
+        e+=cp*elapsedTime;
+        opi+=data[i].oilPressureInlet;
+        opo+=data[i].oilPressureOutlet;
+        afvp+=data[i].airFilterVacuumPressure;
+        dvpo+=data[i].drainValvePressureOutlet;
+        console.log(ps,vs,cs,cp,elapsedTime,p,e,opi,opo,afvp,dvpo)
+      }
+      else{
+        i+=1;
+        console.log(ps,vs,cs,p,e,opi,opo,afvp,dvpo)
+        chartData24hrs.push({
+          time: currtimehr-flag,
+          pressureSensor: ps,
+          voltageSensor: vs,
+          currentSensor: cs,
+          power: p,
+          energy: e,
+          oilPressureInlet: opi,
+          oilPressureOutlet: opo,
+          airFilterVacuumPressure: afvp,
+          drainValvePressureOutlet: dvpo
+        })
+        flag++;
+        ps=vs=cs=p=e=opi=opo=afvp=dvpo=0;
+      }
+      
+    }else if(timediff<=tenDaysInMs){
+      if(j==0){
+      }
+      console.log(currdatatime,currtime,timediff,tenDaysInMs);
+    }else{
+      break;
+    }
 
-
+  }
+  console.log(chartData24hrs);
+}
 // Dummy data for the chart
 const chartData = [
-  { month: "10", ps1: 186, ps2: 196, ps3: 152, ps4: 148, ps5: 120, ps6: 150, ps7: 148 },
-  { month: "11", ps1: 305, ps2: 150, ps3: 179, ps4: 165, ps5: 136, ps6: 201, ps7: 196 },
-  { month: "12", ps1: 237, ps2: 196, ps3: 175, ps4: 148, ps5: 174, ps6: 150, ps7: 184 },
-  { month: "13", ps1: 73, ps2: 136, ps3: 162, ps4: 126, ps5: 156, ps6: 86, ps7: 95 },
-  { month: "14", ps1: 209, ps2: 187, ps3: 150, ps4: 172, ps5: 182, ps6: 192, ps7: 186 },
-  { month: "15", ps1: 214, ps2: 150, ps3: 186, ps4: 150, ps5: 146, ps6: 96, ps7: 196 },
+  { month: "10", ps1: 186, ps2: 196, ps3: 152, ps4: 148, ps5: 120, ps6: 150, ps7: 148, ps8:130 ,ps9:150},
+  { month: "11", ps1: 305, ps2: 150, ps3: 179, ps4: 165, ps5: 136, ps6: 201, ps7: 196, ps8:110 ,ps9:170 },
+  { month: "12", ps1: 237, ps2: 196, ps3: 175, ps4: 148, ps5: 174, ps6: 150, ps7: 184, ps8:140 ,ps9:190 },
+  { month: "13", ps1: 73, ps2: 136, ps3: 162, ps4: 126, ps5: 156, ps6: 86, ps7: 95, ps8:190 ,ps9:200 },
+  { month: "14", ps1: 209, ps2: 187, ps3: 150, ps4: 172, ps5: 182, ps6: 192, ps7: 186, ps8:200 ,ps9:220 },
+  { month: "15", ps1: 214, ps2: 150, ps3: 186, ps4: 150, ps5: 146, ps6: 96, ps7: 196, ps8:230 ,ps9:250 },
 ];
 
 const dataConfigs = [
@@ -114,10 +337,13 @@ const dataConfigs = [
   { dataKey: "ps4", type: "natural", fill: "#28A745", fillOpacity: 0.4, stroke: "#28A745" },
   { dataKey: "ps5", type: "natural", fill: "#FFC107", fillOpacity: 0.4, stroke: "#FFC107" },
   { dataKey: "ps6", type: "natural", fill: "#6F42C1", fillOpacity: 0.4, stroke: "#6F42C1" },
+  { dataKey: "ps7", type: "natural", fill: "#17A2B8", fillOpacity: 0.4, stroke: "#17A2B8" },
+  { dataKey: "ps8", type: "natural", fill: "#03fcb1", fillOpacity: 0.4, stroke: "#03fcb1" },
+  { dataKey: "ps9", type: "natural", fill: "#FF5733", fillOpacity: 0.4, stroke: "#FF5733" },
 ];
 
 
-
+const label = ["Pressure Sensor", "Voltage sensor", "Current sensor ", "Power", "Energy", "Oil pressure inlet", "Oil pressure outlet", "Air filter vacuum pressure", "Drain valve pressure outlet"]
 // Chart configuration
 const chartConfig = {
   ps1: {
@@ -230,6 +456,9 @@ const Dashboard = () => {
   const backtomainpage = () => {
     setSelectedIndex(null);
   }
+  useEffect(()=>{
+    calculatingdata();
+  })
   // const [loading, setLoading] = useState(true);
 
   // const [data, setData] = useState<TransformedData[]>([]);
@@ -267,7 +496,7 @@ const Dashboard = () => {
         <>
           {/* Cards */}
           <div className="grid grid-cols-2 gap-4">
-            {Array.from({ length: 6 }).map((_, index) => (
+            {Array.from({ length: 9 }).map((_, index) => (
               <Card
                 key={index}
                 className={`w-full h-30 sm:h-auto shadow-md cursor-pointer ${selectedIndex === index ? 'bg-blue-100' : ''}`}
@@ -275,7 +504,7 @@ const Dashboard = () => {
               >
                 <CardHeader>
                   <CardTitle className="font-semibold text-sm">
-                    PS - {index + 1}
+                    {label[index]}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -287,14 +516,49 @@ const Dashboard = () => {
                 </CardFooter>
               </Card>
             ))}
+          <Card className="hidden md:block" >
+            <br />
+            <CardContent className=" grid gap-4">
+              <p className="font-semibold text-sm">Compressor running duration load :</p>
+              <p className="font-semibold text-sm">Compressor running duration unload :</p>
+            </CardContent>
+          </Card>
+          <Card className="hidden md:block" >
+            <br />
+            <CardContent className="grid gap-4">
+              <p className="font-semibold text-sm">Oil filter condition :</p>
+              <p className="font-semibold text-sm">Oil temperature sensor :</p>
+              <p className="font-semibold text-sm">Oil temperature condition :</p>
+            </CardContent>
+          </Card>
+          <Card className="hidden md:block ">
+            <br />
+            <CardContent className="grid gap-4">
+              <p className="font-semibold text-sm">Air filter condition  :</p>
+              <p className="font-semibold text-sm">Drain duration :</p>	
+            </CardContent>
+          </Card>
           </div>
+          <br />
+          <Card className="block md:hidden grid gap-4">
+            <br />
+            <CardContent className="grid gap-4">
+              <p className="font-semibold text-sm">Compressor running duration load :</p>
+              <p className="font-semibold text-sm">Compressor running duration unload :</p>
+              <p className="font-semibold text-sm">Oil filter condition :</p>
+              <p className="font-semibold text-sm">Oil temperature sensor :</p>
+              <p className="font-semibold text-sm">Oil temperature condition :</p>
+              <p className="font-semibold text-sm">Air filter condition  :</p>
+              <p className="font-semibold text-sm">Drain duration :</p>	
+            </CardContent>
+          </Card>
 
           {/* Graph */}
           <div className="mt-8">
             <Card>
               <CardHeader>
                 <CardTitle>
-                  PS Graph &#160;&#160;&#160;&#160;&#160;
+                  Overall Graph &#160;&#160;&#160;&#160;&#160;
                   <Switch />
                 </CardTitle>
               </CardHeader>
@@ -430,6 +694,8 @@ const Dashboard = () => {
             </Card>
           </div>
       )}
+      <br/>
+      <br/>
     </>
   );
 };

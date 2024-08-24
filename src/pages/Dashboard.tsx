@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Card,
@@ -17,6 +17,85 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Switch } from "../components/ui/switch";
+
+interface SensorData {
+  airFilterVacuumPressure: number;
+  currentSensor: number;
+  dischargePressureSensor: number;
+  drainValvePressureOutlet: number;
+  machine: number;
+  oilPressureInlet: number;
+  oilPressureOutlet: number;
+  oilTemperatureSensor: number;
+  voltageSensor: number;
+}
+
+interface TransformedData {
+  timestamp: string;
+  airFilterVacuumPressure: number;
+  currentSensor: number;
+  dischargePressureSensor: number;
+  drainValvePressureOutlet: number;
+  machine: number;
+  oilPressureInlet: number;
+  oilPressureOutlet: number;
+  oilTemperatureSensor: number;
+  voltageSensor: number;
+}
+
+
+const data =[
+  
+{
+  timestamp: '2024-08-24 11:11:11', 
+  airFilterVacuumPressure: 29.8, 
+  currentSensor: 10, 
+  dischargePressureSensor: 12.5, 
+  drainValvePressureOutlet: 0.5,
+  machine: 1,
+  oilPressureInlet: 30.2,
+  oilPressureOutlet: 28.9,
+  oilTemperatureSensor: 150,
+  voltageSensor: 120
+},
+{
+  timestamp: '2024-08-24 12:30:38', 
+  airFilterVacuumPressure: 700, 
+  currentSensor: 56, 
+  dischargePressureSensor: 577, 
+  drainValvePressureOutlet: 693,
+  machine: 1,
+  oilPressureInlet: 15005,
+  oilPressureOutlet: 5090,
+  oilTemperatureSensor: 53,
+  voltageSensor: 156
+},
+{
+  timestamp: '2024-08-24 12:30:52', 
+  airFilterVacuumPressure: 181, 
+  currentSensor: 32, 
+  dischargePressureSensor: 522, 
+  drainValvePressureOutlet: 478,
+  machine: 1,
+  oilPressureInlet: 5834,
+  oilPressureOutlet: 6100,
+  oilTemperatureSensor: 134,
+  voltageSensor: 207
+},
+{
+  timestamp: '2024-08-24 12:30:54', 
+  airFilterVacuumPressure: 1483, 
+  currentSensor: 24, 
+  dischargePressureSensor: 680, 
+  drainValvePressureOutlet: 1538,
+  machine: 1,
+  oilPressureInlet: 9196,
+  oilPressureOutlet: 13852,
+  oilTemperatureSensor: 87,
+  voltageSensor: 429
+},
+]
+
 
 // Dummy data for the chart
 const chartData = [
@@ -138,6 +217,7 @@ const WatchlistCard = () => {
   );
 };
 
+
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
@@ -150,6 +230,36 @@ const Dashboard = () => {
   const backtomainpage = () => {
     setSelectedIndex(null);
   }
+  // const [loading, setLoading] = useState(true);
+
+  // const [data, setData] = useState<TransformedData[]>([]);
+
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const response = await fetch("https://indotech-server.vercel.app/");
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       const rawData: Record<string, SensorData> = await response.json(); // Assuming rawData is an object where keys are timestamps and values are SensorData
+  //       const transformedData: TransformedData[] = Object.keys(rawData).map(timestamp => ({
+  //         timestamp,
+  //         ...rawData[timestamp]
+  //       }));
+  //       console.log(transformedData)
+  //       setData(transformedData); // Now TypeScript knows this is of type TransformedData[]
+  //     } catch (error) {
+  //       console.error("There was a problem with the fetch operation:", error);
+  //     }
+  //   }
+  
+  //   fetchData();
+  // }, []);
+  
+
+
+  // if (loading) return <div className="loader">Loading...</div>; //replace this for loader
+
 
   return (
     <>
@@ -261,7 +371,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </div>
-          <br/><br/>
+
           {/* Watchlist Card */}
           {/* <WatchlistCard /> */}
         </>

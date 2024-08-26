@@ -96,7 +96,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Full viewport height */
+  height: 100%;
+  margin-top: 5%;
+  overflow: hidden; 
 }
 
 /* Blink effect */

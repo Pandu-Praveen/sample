@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
-import sampleLogo from 'src/img/samplelogo.png';
+import sampleLogo from '../img/samplelogo.png';
 import {
   Card,
   CardHeader,

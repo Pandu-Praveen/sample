@@ -446,7 +446,7 @@ const WatchlistCard = () => {
 
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
+  const [showContent, setShowContent] = useState(true);
 
   const handleCardClick = (index: number) => {
     console.log("Selected Index:", index); // Log the selected index
@@ -456,6 +456,15 @@ const Dashboard = () => {
   const backtomainpage = () => {
     setSelectedIndex(null);
   }
+  useEffect(() => {
+    // Disable the blink effect and show the content after 5 seconds
+    const timer = setTimeout(() => {
+      // setShowBlink(false);
+      setShowContent(false);
+    }, 3000); // 5 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
   useEffect(()=>{
     calculatingdata();
   })
@@ -492,6 +501,21 @@ const Dashboard = () => {
 
   return (
     <>
+      {showContent ? (
+        <div className="centered-container">
+          <div className="centered-container">
+            <img
+              src="src/img/samplelogo.png" // Update with the actual path to your image
+              alt="Blinking"
+              className={"blink-effect"}
+              style={{ width: "450px", height: "auto" }} // Optional: Adjust size
+            />
+          </div>
+
+          {/* Other content of the Dashboard */}
+        </div>
+      ) : (
+      <div>
       {selectedIndex === null ? (
         <>
           {/* Cards */}
@@ -696,6 +720,8 @@ const Dashboard = () => {
       )}
       <br/>
       <br/>
+      </div>
+      )};
     </>
   );
 };

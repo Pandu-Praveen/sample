@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
+import sampleLogo from 'src/img/samplelogo.png';
 import {
   Card,
   CardHeader,
@@ -506,7 +507,7 @@ const Dashboard = () => {
         <div className="centered-container">
           <div className="centered-container">
             <img
-              src="src/img/samplelogo.png" // Update with the actual path to your image
+              src={sampleLogo} // Update with the actual path to your image
               alt="Blinking"
               className={"blink-effect"}
               style={{ width: "450px", height: "auto" }} // Optional: Adjust size

@@ -1,6 +1,6 @@
 import { appConfig } from "@/config/app";
 import { Icons } from "./icons";
-import headerLogo from '../src/img/sample.png';
+import headerLogo from '../../img/sample.png';
 export function Logo() {
   return (
     <>

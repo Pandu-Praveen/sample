@@ -255,6 +255,7 @@ const data =[
   voltageSensor: 429
 },
 ]
+
 const tenDaysInMs = 10 * 24 * 60 * 60 * 1000;
 const oneDayInMs= 24 * 60 * 60 * 1000;
 const currtimehr: number = new Date("2024-08-24T14:40:54").getHours();
@@ -265,13 +266,13 @@ const chartData24hrs: ChartData24hrs[] = [];
 const chartData10days=[];
 const hrsdiff=60*60*1000;
 let flag=1; 
+ 
 async function calculatingdata(){
   for (let i=data.length -1;i>=0;i--){
     let j=0;
     const currdatatime = new Date(data[i].timestamp.replace(" ","T")).getTime();
     const timediff=currtime-currdatatime;
     if(timediff<=oneDayInMs){
-      console.log()
       if(hrsdiff*flag>=currtime-currdatatime){
         ps+=data[i].dischargePressureSensor;
         vs+=data[i].voltageSensor;
@@ -451,13 +452,13 @@ const Dashboard = () => {
   const [showContent, setShowContent] = useState(true);
 
   const handleCardClick = (index: number) => {
-    console.log("Selected Index:", index); // Log the selected index
     setSelectedIndex(index);
   };
   
   const backtomainpage = () => {
     setSelectedIndex(null);
   }
+
   useEffect(() => {
     // Disable the blink effect and show the content after 5 seconds
     const timer = setTimeout(() => {
@@ -467,9 +468,10 @@ const Dashboard = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
   useEffect(()=>{
     calculatingdata();
-  })
+  }, [])
   // const [loading, setLoading] = useState(true);
 
   // const [data, setData] = useState<TransformedData[]>([]);

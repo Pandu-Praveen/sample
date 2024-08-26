@@ -36,7 +36,7 @@ export function Header() {
         <div className="mr-4 hidden md:flex">
           <NavLink to="/" className="mr-6 flex items-center space-x-2">
             <Logo />
-            <ModeToggle></ModeToggle>
+       
           </NavLink>
           {/* <nav className="flex items-center space-x-6 text-sm font-medium">
             {mainMenu.map((menu, index) =>

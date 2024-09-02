@@ -84,6 +84,13 @@
     @apply bg-background text-foreground;
   }
 }
+body::-webkit-scrollbar {
+  height: 16px;
+  overflow: visible;
+  width: 16px;
+  display: none;
+}
+
 .glassmorphic-header {
   background: rgba(255, 255, 255, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.2);

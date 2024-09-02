@@ -342,6 +342,52 @@ async function calculatingdata() {
   // console.log(ps,vs,cs,cp,elapsedTime,p,e,opi,opo,afvp,dvpo)
 }
 
+function aggregateDataByHour(Data: typeof data) {
+  const result = {};
+
+  Data.forEach(entry => {
+    const hour = new Date(entry.timestamp).getHours();
+    // @ts-ignore
+    if (!result[hour]) {
+      // @ts-ignore
+      result[hour] = {
+        time: hour,
+        airFilterVaccumPressure: 0,
+        currentSensor: 0,
+        dischargePressureSensor: 0,
+        drainValvePressureOutlet: 0,
+        oilPressureInlet: 0,
+        oilPressureOutlet: 0,
+        oilTemperatureSensor: 0,
+        voltageSensor: 0,
+        count: 0
+      };
+    }
+
+    result[hour].airFilterVaccumPressure += entry.airFilterVaccumPressure;
+    result[hour].currentSensor += entry.currentSensor;
+    result[hour].dischargePressureSensor += entry.dischargePressureSensor;
+    result[hour].drainValvePressureOutlet += entry.drainValvePressureOutlet;
+    result[hour].oilPressureInlet += entry.oilPressureInlet;
+    result[hour].oilPressureOutlet += entry.oilPressureOutlet;
+    result[hour].oilTemperatureSensor += entry.oilTemperatureSensor;
+    result[hour].voltageSensor += entry.voltageSensor;
+    result[hour].count += 1;
+  });
+
+  return Object.values(result).map(hourData => ({
+    time: hourData.time,
+    airFilterVaccumPressure: hourData.airFilterVaccumPressure / hourData.count,
+    currentSensor: hourData.currentSensor / hourData.count,
+    dischargePressureSensor: hourData.dischargePressureSensor / hourData.count,
+    drainValvePressureOutlet: hourData.drainValvePressureOutlet / hourData.count,
+    oilPressureInlet: hourData.oilPressureInlet / hourData.count,
+    oilPressureOutlet: hourData.oilPressureOutlet / hourData.count,
+    oilTemperatureSensor: hourData.oilTemperatureSensor / hourData.count,
+    voltageSensor: hourData.voltageSensor / hourData.count
+  }));
+}
+
 const label = [
   { label: "Pressure Sensor", key: "dischargePressureSensor"},
   { label: "Voltage sensor", key: "voltageSensor"},
@@ -355,16 +401,16 @@ const label = [
 ];
 // Chart configuration
 const chartColors = [
-    "#FF5763", // Bright Red-Orange
-    "#33FF57", // Bright Green
-    "#3357FF", // Bright Blue
-    "#FF33B1", // Bright Pink
-    "#A133FF", // Bright Purple
-    "#33FFA1", // Bright Mint Green
-    "#FF3C33", // Bright Orange
-    "#33FF8C", // Bright Light Green
-    "#8C33F0", // Bright Violet
-    "#F9338C"  // Bright Magenta
+    "#FF5763", 
+    "#33FF57",
+    "#3357FF",
+    "#FF33B1",
+    "#A133FF",
+    "#33FFA1",
+    "#FF3C33",
+    "#33FF8C",
+    "#8C33F0",
+    "#F9338C"
 ];
 const chartConfig = {
 } satisfies ChartConfig;
@@ -379,7 +425,9 @@ label.map((detail, i) => {
 
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [showContent, setShowContent] = useState(true);
+  const [showContent, setShowContent] = useState(false);
+  const [transformedData, setTransformedData] = useState();
+  console.log("🚀 ~ Dashboard ~ transformedData:", transformedData)
 
   const handleCardClick = (index: number) => {
     setSelectedIndex(index);
@@ -393,14 +441,15 @@ const Dashboard = () => {
     // Disable the blink effect and show the content after 5 seconds
     const timer = setTimeout(() => {
       // setShowBlink(false);
-      setShowContent(false);
+      setShowContent(true);
     }, 30); // 5 seconds
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    calculatingdata();
+    // calculatingdata();
+    setTransformedData(aggregateDataByHour(data));
   }, []);
   // const [loading, setLoading] = useState(true);
 
@@ -432,7 +481,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {showContent ? (
+      {!showContent ? (
         <div className="centered-container">
           <div className="centered-container">
             <img
@@ -549,10 +598,10 @@ const Dashboard = () => {
                     >
                       <AreaChart
                         accessibilityLayer
-                        data={chartData24hrs}
+                        data={transformedData}
                         margin={{ left: 12, right: 12, top: 24, bottom: 24 }}
                         width={800} // Set fixed width
-                        height={400} // Set fixed height
+                        height={200} // Set fixed height
                       >
                         <CartesianGrid vertical={false} />
                         <XAxis
@@ -582,41 +631,6 @@ const Dashboard = () => {
                               />
                             ))
                         }
-                        {/* <Area
-                          dataKey="ps2"
-                          type="natural"
-                          fill="#03fcb1"
-                          fillOpacity={0}
-                          stroke="#03fcb1"
-                        />
-                        <Area
-                          dataKey="ps3"
-                          type="natural"
-                          fill="#FF5733"
-                          fillOpacity={0}
-                          stroke="#FF5733"
-                        />
-                        <Area
-                          dataKey="ps4"
-                          type="natural"
-                          fill="#28A745"
-                          fillOpacity={0}
-                          stroke="#28A745"
-                        />
-                        <Area
-                          dataKey="ps5"
-                          type="natural"
-                          fill="#FFC107"
-                          fillOpacity={0}
-                          stroke="#FFC107"
-                        />
-                        <Area
-                          dataKey="ps6"
-                          type="natural"
-                          fill="#6F42C1"
-                          fillOpacity={0}
-                          stroke="#6F42C1"
-                        /> */}
                       </AreaChart>
                     </ChartContainer>
                   </CardContent>
@@ -628,7 +642,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    PS{selectedIndex + 1} Graph &#160;&#160;&#160;&#160;&#160;
+                    {label[selectedIndex].label} Graph &#160;&#160;&#160;&#160;&#160;
                     <Switch />
                   </CardTitle>
                 </CardHeader>
@@ -639,7 +653,7 @@ const Dashboard = () => {
                   >
                     <AreaChart
                       accessibilityLayer
-                      data={chartData24hrs}
+                      data={transformedData}
                       margin={{ left: 12, right: 12, top: 24, bottom: 24 }}
                       width={800} // Set fixed width
                       height={400} // Set fixed height

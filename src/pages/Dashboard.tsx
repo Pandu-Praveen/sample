@@ -7,10 +7,8 @@ import {
   CardHeader,
   CardFooter,
   CardTitle,
-  CardContent,
-  CardDescription,
+  CardContent
 } from "@/components/ui/card";
-import { TrendingUp, TrendingDown } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   ChartConfig,
@@ -253,97 +251,11 @@ const data = [
   },
 ];
 
-const tenDaysInMs = 10 * 24 * 60 * 60 * 1000;
-const oneDayInMs = 24 * 60 * 60 * 1000;
-
-const currtimehr = new Date("2024-08-24T14:40:54").getHours();
-const currtime = new Date("2024-08-24T14:40:54").getTime();
-
-let ps = 0,
-  vs = 0,
-  cs = 0,
-  p = 0,
-  e = 0,
-  opi = 0,
-  opo = 0,
-  afvp = 0,
-  dvpo = 0;
-let psd = 0,
-  vsd = 0,
-  csd = 0,
-  pd = 0,
-  ed = 0,
-  opid = 0,
-  opod = 0,
-  afvpd = 0,
-  dvpod = 0;
-
 const chartData24hrs: ChartData24hrs[] = [];
 const chartData10days = [];
 
-const hrsdiff = 60 * 60 * 1000;
-
-let flag = 1;
-
-async function calculatingdata() {
-  for (let i = data.length - 1; i >= 0; i--) {
-    let j = 0;
-    const currdatatime = new Date(
-      data[i].timestamp.replace(" ", "T")
-    ).getTime();
-    const timediff = currtime - currdatatime;
-    if (timediff <= oneDayInMs) {
-      if (hrsdiff * flag >= currtime - currdatatime) {
-        ps += data[i].dischargePressureSensor;
-        vs += data[i].voltageSensor;
-        cs += data[i].currentSensor;
-        let cp =
-          (1.732 * data[i].voltageSensor * data[i].currentSensor * 0.8) / 1000;
-        let elapsedTime;
-        if (i - 1 > 0) {
-          elapsedTime =
-            new Date(data[i].timestamp.replace(" ", "T")).getTime() -
-            new Date(data[i - 1].timestamp.replace(" ", "T")).getTime();
-        } else {
-          elapsedTime = 0;
-        }
-        p += cp;
-        e += cp * elapsedTime;
-        opi += data[i].oilPressureInlet;
-        opo += data[i].oilPressureOutlet;
-        afvp += data[i].airFilterVaccumPressure;
-        dvpo += data[i].drainValvePressureOutlet;
-      } else {
-        i += 1;
-        chartData24hrs.push({
-          time: currtimehr - flag,
-          pressureSensor: ps,
-          voltageSensor: vs,
-          currentSensor: cs,
-          power: p,
-          energy: e,
-          oilPressureInlet: opi,
-          oilPressureOutlet: opo,
-          airFilterVaccumPressure: afvp,
-          drainValvePressureOutlet: dvpo,
-        });
-        flag++;
-        ps = vs = cs = p = e = opi = opo = afvp = dvpo = 0;
-      }
-    } else if (timediff <= tenDaysInMs) {
-      if (j == 0) {
-      }
-      console.log(currdatatime, currtime, timediff, tenDaysInMs);
-    } else {
-      break;
-    }
-  }
-  console.log(chartData24hrs);
-  // console.log(ps,vs,cs,cp,elapsedTime,p,e,opi,opo,afvp,dvpo)
-}
-
 function aggregateDataByHour(Data: typeof data) {
-  const result = {};
+  const result: { [hour: number]: typeof data } = {};
 
   Data.forEach(entry => {
     const hour = new Date(entry.timestamp).getHours();
@@ -426,7 +338,7 @@ label.map((detail, i) => {
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showContent, setShowContent] = useState(false);
-  const [transformedData, setTransformedData] = useState();
+  const [transformedData, setTransformedData] = useState<typeof data | undefined>();
   console.log("🚀 ~ Dashboard ~ transformedData:", transformedData)
 
   const handleCardClick = (index: number) => {
@@ -449,6 +361,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     // calculatingdata();
+    // @ts-ignore
     setTransformedData(aggregateDataByHour(data));
   }, []);
   // const [loading, setLoading] = useState(true);
@@ -516,7 +429,7 @@ const Dashboard = () => {
                     </CardContent>
                     <CardFooter className="flex justify-between font-normal text-xs">
                       {/* // @ts-ignore */}
-                      <h1 className="font-bold text-sm">{data.at(-1)[label[index].key]}</h1>
+                      <h1 className="font-bold text-sm">{data.at(-1)?.[label[index].key as keyof typeof data[0]]}</h1>
                       <p className="text-xs">optimum</p>
                     </CardFooter>
                   </Card>

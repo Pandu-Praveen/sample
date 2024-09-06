@@ -18,30 +18,8 @@ import {
 } from "@/components/ui/chart";
 import { Switch } from "../components/ui/switch";
 
-interface SensorData {
-  airFilterVaccumPressure: number;
-  currentSensor: number;
-  dischargePressureSensor: number;
-  drainValvePressureOutlet: number;
-  machine: number;
-  oilPressureInlet: number;
-  oilPressureOutlet: number;
-  oilTemperatureSensor: number;
-  voltageSensor: number;
-}
-
-interface TransformedData {
-  timestamp: string;
-  airFilterVaccumPressure: number;
-  currentSensor: number;
-  dischargePressureSensor: number;
-  drainValvePressureOutlet: number;
-  machine: number;
-  oilPressureInlet: number;
-  oilPressureOutlet: number;
-  oilTemperatureSensor: number;
-  voltageSensor: number;
-}
+const OTM = 115;
+const POWER_FACTOR = 0.8;
 
 interface ChartData24hrs {
   time: number; // or string if you plan to use a different format
@@ -272,7 +250,7 @@ function aggregateDataByHour(Data: typeof data) {
         oilPressureOutlet: 0,
         oilTemperatureSensor: 0,
         voltageSensor: 0,
-        count: 0
+        count: 0,
       };
     }
 
@@ -284,6 +262,7 @@ function aggregateDataByHour(Data: typeof data) {
     result[hour].oilPressureOutlet += entry.oilPressureOutlet;
     result[hour].oilTemperatureSensor += entry.oilTemperatureSensor;
     result[hour].voltageSensor += entry.voltageSensor;
+    // result[hour]. += 1;
     result[hour].count += 1;
   });
 
@@ -335,10 +314,31 @@ label.map((detail, i) => {
   }
 })
 
+type DerivedDataType = {
+  power: number,
+  energy: number,
+  compressorUnload: number,
+  compressorLoad: number,
+  drainDuration: number,
+  airFilterCondition: "GOOD" | "BAD" | "CALCULATING",
+  oilFilterCondition: "GOOD" | "BAD" | "CALCULATING",
+  oilTemperatureCondition: "NORMAL" | "HIGH" | "CALCULATING",
+}
+
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showContent, setShowContent] = useState(false);
   const [transformedData, setTransformedData] = useState<typeof data | undefined>();
+  const [derivedData, setDerivedData] = useState<DerivedDataType>({
+    power: 0,
+    energy: 0,
+    compressorUnload: 0,
+    compressorLoad: 0,
+    drainDuration: 0,
+    airFilterCondition: "GOOD",
+    oilFilterCondition: "GOOD",
+    oilTemperatureCondition: "NORMAL",
+  })
   console.log("🚀 ~ Dashboard ~ transformedData:", transformedData)
 
   const handleCardClick = (index: number) => {
@@ -349,6 +349,7 @@ const Dashboard = () => {
     setSelectedIndex(null);
   };
 
+  /** Use effect for dashboard loading effect */
   useEffect(() => {
     // Disable the blink effect and show the content after 5 seconds
     const timer = setTimeout(() => {
@@ -359,11 +360,41 @@ const Dashboard = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  /** Effect to perform calculations */
   useEffect(() => {
     // calculatingdata();
     // @ts-ignore
     setTransformedData(aggregateDataByHour(data));
   }, []);
+
+  /** Effect for running derived calculations if `data` changes */
+  useEffect(() => {
+    function createDerivedData() {
+      const power = (1.732 * transformedData?.at(-1)?.voltageSensor * transformedData?.at(-1)?.currentSensor * 0.8)/1000;
+      const energy = 0;
+      const compressorLoad = power; // duration
+      const compressorUnload = power; // duration kandupudi
+      const airFilterCondition = transformedData ? transformedData.at(-1)!.airFilterVaccumPressure <= 0.8? "BAD": "GOOD": "CALCULATING";
+      const oilFilterCondition = transformedData ? transformedData.at(-1)!.oilPressureInlet - transformedData?.at(-1)!.oilPressureOutlet >= 0.6? "BAD": "GOOD": "CALCULATING";
+      const oilTemperatureCondition = transformedData ? transformedData.at(-1)!.oilTemperatureSensor >= OTM? "HIGH": "NORMAL": "CALCULATING";
+      const drainDuration = transformedData ? transformedData.at(-1)!.drainValvePressureOutlet: 0; // duration kandupudi
+
+      setDerivedData({
+        airFilterCondition,
+        compressorLoad,
+        compressorUnload,
+        drainDuration,
+        energy,
+        oilFilterCondition,
+        oilTemperatureCondition,
+        power
+      })
+    }
+
+    createDerivedData();
+  }, [transformedData]);
+  
+  /** Data fetching logic disabled tempo for testing */
   // const [loading, setLoading] = useState(true);
 
   // const [data, setData] = useState<TransformedData[]>([]);
@@ -438,10 +469,10 @@ const Dashboard = () => {
                   <br />
                   <CardContent className=" grid gap-4">
                     <p className="font-semibold text-sm">
-                      Compressor running duration load :
+                      Compressor running duration load : {derivedData.compressorLoad.toFixed(2)}
                     </p>
                     <p className="font-semibold text-sm">
-                      Compressor running duration unload :
+                      Compressor running duration unload : {derivedData.compressorUnload.toFixed(2)}
                     </p>
                   </CardContent>
                 </Card>
@@ -449,13 +480,10 @@ const Dashboard = () => {
                   <br />
                   <CardContent className="grid gap-4">
                     <p className="font-semibold text-sm">
-                      Oil filter condition :
+                      Oil filter condition : {derivedData.oilFilterCondition}
                     </p>
                     <p className="font-semibold text-sm">
-                      Oil temperature sensor :
-                    </p>
-                    <p className="font-semibold text-sm">
-                      Oil temperature condition :
+                      Oil temperature condition : {derivedData.oilTemperatureCondition}
                     </p>
                   </CardContent>
                 </Card>
@@ -463,9 +491,9 @@ const Dashboard = () => {
                   <br />
                   <CardContent className="grid gap-4">
                     <p className="font-semibold text-sm">
-                      Air filter condition :
+                      Air filter condition : {derivedData.airFilterCondition}
                     </p>
-                    <p className="font-semibold text-sm">Drain duration :</p>
+                    <p className="font-semibold text-sm">Drain duration : {derivedData.drainDuration.toFixed(2)}</p>
                   </CardContent>
                 </Card>
               </div>

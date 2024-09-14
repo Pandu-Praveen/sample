@@ -7,7 +7,6 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-// import {  } from "firebase/database";
 
 type RawData = {
   airFilterVaccumPressure: number;
@@ -326,7 +325,8 @@ function aggregateDataByHour(Data: RawData[]): TransformedDataType[] {
 }
 
 export type SensorDataContextType = {
-  data: TransformedDataType[] | undefined;
+  data: RawData[] | undefined;
+  transformedData: TransformedDataType[] | undefined;
   isLoading: boolean;
   error: string;
   chartData: ChartData24hrs[] | undefined;
@@ -340,8 +340,12 @@ export const SensorDataContext = createContext<
 export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("NO_ERROR");
-  /** `data` contains the transformed data */
-  const [data, setData] = useState<TransformedDataType[] | undefined>();
+  /** `data` contains raw data straight from RTDB only converted to array form */
+  const [data, setData] = useState<RawData[] | undefined>();
+  /** `transformedData` contains the transformed data */
+  const [transformedData, setTransformedData] = useState<
+    TransformedDataType[] | undefined
+  >();
   const [chartData, setChartData] = useState<ChartData24hrs[] | undefined>();
   /** `derviedData` contains data that was derived using formulae */
   const [derivedData, setDerivedData] = useState<DerivedDataType | undefined>();
@@ -369,7 +373,8 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
         console.log("🚀 ~ useEffect ~ transformedData:", transformedData);
 
         setIsLoading(false);
-        setData(transformedData);
+        setData(sensorData);
+        setTransformedData(transformedData);
       },
       (error) => {
         setError(error.message);
@@ -384,29 +389,37 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
     function createDerivedData() {
       const power =
         (1.732 *
-          (data && data.at(-1) ? data.at(-1)!.voltageSensor : 0) *
-          (data && data.at(-1) ? data.at(-1)!.currentSensor : 0) *
+          (transformedData && transformedData.at(-1)
+            ? transformedData.at(-1)!.voltageSensor
+            : 0) *
+          (transformedData && transformedData.at(-1)
+            ? transformedData.at(-1)!.currentSensor
+            : 0) *
           0.8) /
         1000;
       const energy = 0;
       const compressorLoad = power; // duration
       const compressorUnload = power; // duration kandupudi
-      const airFilterCondition = data
-        ? data.at(-1)!.airFilterVaccumPressure <= 0.8
+      const airFilterCondition = transformedData
+        ? transformedData.at(-1)!.airFilterVaccumPressure <= 0.8
           ? "BAD"
           : "GOOD"
         : "CALCULATING";
-      const oilFilterCondition = data
-        ? data.at(-1)!.oilPressureInlet - data?.at(-1)!.oilPressureOutlet >= 0.6
+      const oilFilterCondition = transformedData
+        ? transformedData.at(-1)!.oilPressureInlet -
+            transformedData?.at(-1)!.oilPressureOutlet >=
+          0.6
           ? "BAD"
           : "GOOD"
         : "CALCULATING";
-      const oilTemperatureCondition = data
-        ? data.at(-1)!.oilTemperatureSensor >= OTM
+      const oilTemperatureCondition = transformedData
+        ? transformedData.at(-1)!.oilTemperatureSensor >= OTM
           ? "HIGH"
           : "NORMAL"
         : "CALCULATING";
-      const drainDuration = data ? data.at(-1)!.drainValvePressureOutlet : 0; // duration kandupudi
+      const drainDuration = transformedData
+        ? transformedData.at(-1)!.drainValvePressureOutlet
+        : 0; // duration kandupudi
 
       setDerivedData({
         airFilterCondition,
@@ -421,7 +434,7 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
     }
 
     createDerivedData();
-  }, [data]);
+  }, [transformedData]);
 
   return (
     <SensorDataContext.Provider
@@ -430,6 +443,7 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
         error,
         chartData,
         data,
+        transformedData,
         derivedData,
       }}
     >

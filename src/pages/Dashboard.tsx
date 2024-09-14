@@ -17,8 +17,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Switch } from "../components/ui/switch";
-import { OTM } from "@/constants";
 import { useSensorData } from "@/hooks/useSensorData";
+import { ArrowLeft } from "lucide-react";
 
 const data = [
   {
@@ -251,10 +251,10 @@ label.map((detail, i) => {
 
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [transformedData, setTransformedData] = useState<
-    typeof data | undefined
-  >();
-  const { derivedData, isLoading } = useSensorData();
+
+  /** Calling custom hook to retrieve data */
+  const { derivedData, isLoading, data, transformedData } = useSensorData();
+
   const [showContent, setShowContent] = useState(!isLoading);
 
   const handleCardClick = (index: number) => {
@@ -308,11 +308,11 @@ const Dashboard = () => {
                     <CardFooter className="flex justify-between font-normal text-xs">
                       {/* // @ts-ignore */}
                       <h1 className="font-bold text-sm">
-                        {
-                          data.at(-1)?.[
-                            label[index].key as keyof (typeof data)[0]
-                          ]
-                        }
+                        {data
+                          ? data.at(-1)?.[
+                              label[index].key as keyof (typeof data)[0]
+                            ]
+                          : "Loading..."}
                       </h1>
                       {/* {(data.at(-1).something === somevalue)? <p>display smth</p>: <p>smth else</p>} */}
                       <p className="text-xs">optimum</p>
@@ -443,7 +443,13 @@ const Dashboard = () => {
           ) : (
             <div className="mt-8">
               <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row gap-6">
+                  <button
+                    onClick={backtomainpage}
+                    className="p-2 flex items-center justify-center gap-3 text-center text-sm font-semibold text-blue-600 bg-blue-100 rounded"
+                  >
+                    <ArrowLeft size={16} /> Back
+                  </button>
                   <CardTitle>
                     {label[selectedIndex].label} Graph
                     &#160;&#160;&#160;&#160;&#160;
@@ -457,7 +463,7 @@ const Dashboard = () => {
                   >
                     <AreaChart
                       accessibilityLayer
-                      data={transformedData}
+                      data={data}
                       margin={{ left: 12, right: 12, top: 24, bottom: 24 }}
                       width={800} // Set fixed width
                       height={400} // Set fixed height
@@ -486,14 +492,6 @@ const Dashboard = () => {
                     </AreaChart>
                   </ChartContainer>
                 </CardContent>
-                <CardFooter>
-                  <button
-                    onClick={backtomainpage}
-                    className="w-full py-2 text-center text-sm font-semibold text-blue-600 bg-blue-100 rounded"
-                  >
-                    Back
-                  </button>
-                </CardFooter>
               </Card>
             </div>
           )}

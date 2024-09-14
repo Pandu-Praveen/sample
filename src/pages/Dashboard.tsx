@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardFooter,
   CardTitle,
-  CardContent
+  CardContent,
 } from "@/components/ui/card";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
@@ -17,82 +17,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Switch } from "../components/ui/switch";
-
-
-interface ChartData24hrs {
-  time: number; // or string if you plan to use a different format
-  pressureSensor: number;
-  voltageSensor: number;
-  currentSensor: number;
-  dischargePressureSensor: number,
-  power: number;
-  energy: number;
-  oilPressureInlet: number;
-  oilPressureOutlet: number;
-  oilTemperatureSensor:number;
-  airFilterVaccumPressure: number;
-  drainValvePressureOutlet: number;
-  count: number;
-}
-
-function aggregateDataByHour(Data: typeof data) {
-  const result: { [hour: number]:  ChartData24hrs } = {};
-  let previousTime=0,currentTime,checkPrevTime=false;
-  Data.forEach(entry => {
-    const hour = new Date(entry.timestamp).getHours();
-    if (!result[hour]) {
-      result[hour] = {
-        time: hour,
-        airFilterVaccumPressure: 0,
-        currentSensor: 0,
-        dischargePressureSensor: 0,
-        drainValvePressureOutlet: 0,
-        oilPressureInlet: 0,
-        oilPressureOutlet: 0,
-        oilTemperatureSensor: 0,
-        voltageSensor: 0,
-        power: 0,
-        energy: 0,
-        pressureSensor: 0,
-        count: 0
-      };
-      checkPrevTime=false;
-    }
-    result[hour].power  += (1.732*entry.voltageSensor*entry.currentSensor*0.8)/1000;
-    let elapsedTime = 0;
-    currentTime = new Date(entry.timestamp).getTime();
-    if(checkPrevTime)
-    {
-      elapsedTime = currentTime - previousTime;
-    }
-    previousTime = currentTime;
-    result[hour].energy += (result[hour].power*elapsedTime)/(3600*1000)
-    result[hour].airFilterVaccumPressure += entry.airFilterVaccumPressure;
-    result[hour].currentSensor += entry.currentSensor;
-    result[hour].dischargePressureSensor += entry.dischargePressureSensor;
-    result[hour].drainValvePressureOutlet += entry.drainValvePressureOutlet;
-    result[hour].oilPressureInlet += entry.oilPressureInlet;
-    result[hour].oilPressureOutlet += entry.oilPressureOutlet;
-    result[hour].oilTemperatureSensor += entry.oilTemperatureSensor;
-    result[hour].voltageSensor += entry.voltageSensor;
-    result[hour].count += 1;
-    checkPrevTime=true;
-  });
-
-  return Object.values(result).map(hourData => ({
-    time: hourData.time,
-    airFilterVaccumPressure: hourData.airFilterVaccumPressure / hourData.count,
-    currentSensor: hourData.currentSensor / hourData.count,
-    dischargePressureSensor: hourData.dischargePressureSensor / hourData.count,
-    drainValvePressureOutlet: hourData.drainValvePressureOutlet / hourData.count,
-    oilPressureInlet: hourData.oilPressureInlet / hourData.count,
-    oilPressureOutlet: hourData.oilPressureOutlet / hourData.count,
-    oilTemperatureSensor: hourData.oilTemperatureSensor / hourData.count,
-    voltageSensor: hourData.voltageSensor / hourData.count,
-    power: hourData.power / hourData.count,
-    energy: hourData.energy / hourData.count
-  }));
-}
+import { OTM } from "@/constants";
+import { useSensorData } from "@/hooks/useSensorData";
 
 const data = [
   {
@@ -289,80 +215,49 @@ const data = [
   },
 ];
 
-interface TransformedDataType {
-  timestamp: string;
-  airFilterVaccumPressure: number;
-  currentSensor: number;
-  dischargePressureSensor: number;
-  drainValvePressureOutlet: number;
-  machine: number;
-  oilPressureInlet: number;
-  oilPressureOutlet: number;
-  oilTemperatureSensor: number;
-  voltageSensor: number;
-}
-
 const label = [
-  { label: "Pressure Sensor", key: "dischargePressureSensor"},
-  { label: "Voltage sensor", key: "voltageSensor"},
-  { label: "Current sensor ", key: "currentSensor"},
-  { label: "Power", key: "power"},
-  { label: "Energy", key: "energy"},
-  { label: "Oil pressure inlet", key: "oilPressureInlet"},
-  { label: "Oil pressure outlet", key: "oilPressureOutlet"},
-  { label: "Air filter vaccum pressure", key: "airFilterVaccumPressure"},
-  { label: "Drain valve pressure outlet", key: "drainValvePressureOutlet"},
+  { label: "Pressure Sensor", key: "dischargePressureSensor" },
+  { label: "Voltage sensor", key: "voltageSensor" },
+  { label: "Current sensor ", key: "currentSensor" },
+  { label: "Power", key: "power" },
+  { label: "Energy", key: "energy" },
+  { label: "Oil pressure inlet", key: "oilPressureInlet" },
+  { label: "Oil pressure outlet", key: "oilPressureOutlet" },
+  { label: "Air filter vaccum pressure", key: "airFilterVaccumPressure" },
+  { label: "Drain valve pressure outlet", key: "drainValvePressureOutlet" },
 ];
 // Chart configuration
 const chartColors = [
-    "#FF5763", 
-    "#33FF57",
-    "#3357FF",
-    "#FF33B1",
-    "#A133FF",
-    "#33FFA1",
-    "#FF3C33",
-    "#33FF8C",
-    "#8C33F0",
-    "#F9338C"
+  "#FF5763",
+  "#33FF57",
+  "#3357FF",
+  "#FF33B1",
+  "#A133FF",
+  "#33FFA1",
+  "#FF3C33",
+  "#33FF8C",
+  "#8C33F0",
+  "#F9338C",
 ];
-const chartConfig = {
-} satisfies ChartConfig;
+const chartConfig = {} satisfies ChartConfig;
 
 label.map((detail, i) => {
   // @ts-ignore
   chartConfig[detail.key] = {
     label: detail.label,
-    color: chartColors[i]
-  }
-})
-
-type DerivedDataType = {
-  power: number,
-  energy: number,
-  compressorUnload: number,
-  compressorLoad: number,
-  drainDuration: number,
-  airFilterCondition: "GOOD" | "BAD" | "CALCULATING",
-  oilFilterCondition: "GOOD" | "BAD" | "CALCULATING",
-  oilTemperatureCondition: "NORMAL" | "HIGH" | "CALCULATING",
-}
+    color: chartColors[i],
+  };
+});
 
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showContent, setShowContent] = useState(false);
-  const [transformedData, setTransformedData] = useState<typeof data | undefined>();
-  const [derivedData, setDerivedData] = useState<DerivedDataType>({
-    power: 0,
-    energy: 0,
-    compressorUnload: 0,
-    compressorLoad: 0,
-    drainDuration: 0,
-    airFilterCondition: "GOOD",
-    oilFilterCondition: "GOOD",
-    oilTemperatureCondition: "NORMAL",
-  })
-  console.log("🚀 ~ Dashboard ~ transformedData:", transformedData)
+  const [transformedData, setTransformedData] = useState<
+    typeof data | undefined
+  >();
+  const { data: d, derivedData } = useSensorData();
+
+  console.log("🚀 ~ Dashboard ~ transformedData:", transformedData, d);
 
   const handleCardClick = (index: number) => {
     setSelectedIndex(index);
@@ -387,36 +282,11 @@ const Dashboard = () => {
   useEffect(() => {
     // calculatingdata();
     // @ts-ignore
-    setTransformedData(aggregateDataByHour(data));
+    // setTransformedData(aggregateDataByHour(data));
   }, []);
 
   /** Effect for running derived calculations if `data` changes */
-  useEffect(() => {
-    function createDerivedData() {
-      const power = (1.732 * transformedData?.at(-1)?.voltageSensor * transformedData?.at(-1)?.currentSensor * 0.8)/1000;
-      const energy = 0;
-      const compressorLoad = power; // duration
-      const compressorUnload = power; // duration kandupudi
-      const airFilterCondition = transformedData ? transformedData.at(-1)!.airFilterVaccumPressure <= 0.8? "BAD": "GOOD": "CALCULATING";
-      const oilFilterCondition = transformedData ? transformedData.at(-1)!.oilPressureInlet - transformedData?.at(-1)!.oilPressureOutlet >= 0.6? "BAD": "GOOD": "CALCULATING";
-      const oilTemperatureCondition = transformedData ? transformedData.at(-1)!.oilTemperatureSensor >= OTM? "HIGH": "NORMAL": "CALCULATING";
-      const drainDuration = transformedData ? transformedData.at(-1)!.drainValvePressureOutlet: 0; // duration kandupudi
 
-      setDerivedData({
-        airFilterCondition,
-        compressorLoad,
-        compressorUnload,
-        drainDuration,
-        energy,
-        oilFilterCondition,
-        oilTemperatureCondition,
-        power
-      })
-    }
-
-    createDerivedData();
-  }, [transformedData]);
-  
   /** Data fetching logic disabled tempo for testing */
   // const [loading, setLoading] = useState(true);
 
@@ -483,7 +353,13 @@ const Dashboard = () => {
                     </CardContent>
                     <CardFooter className="flex justify-between font-normal text-xs">
                       {/* // @ts-ignore */}
-                      <h1 className="font-bold text-sm">{data.at(-1)?.[label[index].key as keyof typeof data[0] ]}</h1>
+                      <h1 className="font-bold text-sm">
+                        {
+                          data.at(-1)?.[
+                            label[index].key as keyof (typeof data)[0]
+                          ]
+                        }
+                      </h1>
                       {/* {(data.at(-1).something === somevalue)? <p>display smth</p>: <p>smth else</p>} */}
                       <p className="text-xs">optimum</p>
                     </CardFooter>
@@ -493,10 +369,12 @@ const Dashboard = () => {
                   <br />
                   <CardContent className=" grid gap-4">
                     <p className="font-semibold text-sm">
-                      Compressor running duration load : {derivedData.compressorLoad.toFixed(2)}
+                      Compressor running duration load :{" "}
+                      {derivedData.compressorLoad.toFixed(2)}
                     </p>
                     <p className="font-semibold text-sm">
-                      Compressor running duration unload : {derivedData.compressorUnload.toFixed(2)}
+                      Compressor running duration unload :{" "}
+                      {derivedData.compressorUnload.toFixed(2)}
                     </p>
                   </CardContent>
                 </Card>
@@ -507,7 +385,8 @@ const Dashboard = () => {
                       Oil filter condition : {derivedData.oilFilterCondition}
                     </p>
                     <p className="font-semibold text-sm">
-                      Oil temperature condition : {derivedData.oilTemperatureCondition}
+                      Oil temperature condition :{" "}
+                      {derivedData.oilTemperatureCondition}
                     </p>
                   </CardContent>
                 </Card>
@@ -517,7 +396,9 @@ const Dashboard = () => {
                     <p className="font-semibold text-sm">
                       Air filter condition : {derivedData.airFilterCondition}
                     </p>
-                    <p className="font-semibold text-sm">Drain duration : {derivedData.drainDuration.toFixed(2)}</p>
+                    <p className="font-semibold text-sm">
+                      Drain duration : {derivedData.drainDuration.toFixed(2)}
+                    </p>
                   </CardContent>
                 </Card>
               </div>
@@ -580,22 +461,20 @@ const Dashboard = () => {
                           cursor={false}
                           content={<ChartTooltipContent indicator="line" />}
                         />
-                        {
-                            Object.keys(chartConfig).map(chart => (
-                              <Area
-                                key={chart}
-                                dataKey={chart}
-                                // @ts-ignore
-                                label={chartConfig[chart].label}
-                                type="natural"
-                                // @ts-ignore
-                                fill={chartConfig[chart].color}
-                                fillOpacity={0}
-                                // @ts-ignore
-                                stroke={chartConfig[chart].color}
-                              />
-                            ))
-                        }
+                        {Object.keys(chartConfig).map((chart) => (
+                          <Area
+                            key={chart}
+                            dataKey={chart}
+                            // @ts-ignore
+                            label={chartConfig[chart].label}
+                            type="natural"
+                            // @ts-ignore
+                            fill={chartConfig[chart].color}
+                            fillOpacity={0}
+                            // @ts-ignore
+                            stroke={chartConfig[chart].color}
+                          />
+                        ))}
                       </AreaChart>
                     </ChartContainer>
                   </CardContent>
@@ -607,7 +486,8 @@ const Dashboard = () => {
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {label[selectedIndex].label} Graph &#160;&#160;&#160;&#160;&#160;
+                    {label[selectedIndex].label} Graph
+                    &#160;&#160;&#160;&#160;&#160;
                     <Switch />
                   </CardTitle>
                 </CardHeader>

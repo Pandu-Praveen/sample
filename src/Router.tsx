@@ -18,6 +18,7 @@ import Notification from "./pages/Notification";
 import { Profile } from "./pages/Profile";
 import { SecondaryChart } from "./pages/SecondaryChart";
 import { Settings } from "./pages/Settings";
+import { SensorDataContextProvider } from "./contexts/SensorDataContext";
 
 // createBrowserRouter
 export const router = createHashRouter([
@@ -27,7 +28,11 @@ export const router = createHashRouter([
     children: [
       {
         path: "",
-        element: <Dashboard />,
+        element: (
+          <SensorDataContextProvider>
+            <Dashboard />
+          </SensorDataContextProvider>
+        ),
       },
       {
         path: "layout/topnav",

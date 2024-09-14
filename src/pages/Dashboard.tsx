@@ -251,13 +251,11 @@ label.map((detail, i) => {
 
 const Dashboard = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [showContent, setShowContent] = useState(false);
   const [transformedData, setTransformedData] = useState<
     typeof data | undefined
   >();
-  const { data: d, derivedData } = useSensorData();
-
-  console.log("🚀 ~ Dashboard ~ transformedData:", transformedData, d);
+  const { derivedData, isLoading } = useSensorData();
+  const [showContent, setShowContent] = useState(!isLoading);
 
   const handleCardClick = (index: number) => {
     setSelectedIndex(index);
@@ -269,52 +267,8 @@ const Dashboard = () => {
 
   /** Use effect for dashboard loading effect */
   useEffect(() => {
-    // Disable the blink effect and show the content after 5 seconds
-    const timer = setTimeout(() => {
-      // setShowBlink(false);
-      setShowContent(true);
-    }, 1000); // 5 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  /** Effect to perform calculations */
-  useEffect(() => {
-    // calculatingdata();
-    // @ts-ignore
-    // setTransformedData(aggregateDataByHour(data));
-  }, []);
-
-  /** Effect for running derived calculations if `data` changes */
-
-  /** Data fetching logic disabled tempo for testing */
-  // const [loading, setLoading] = useState(true);
-
-  // const [data, setData] = useState<TransformedData[]>([]);
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const response = await fetch("https://indotech-server.vercel.app/");
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       const rawData: Record<string, SensorData> = await response.json(); // Assuming rawData is an object where keys are timestamps and values are SensorData
-  //       const transformedData: TransformedData[] = Object.keys(rawData).map(timestamp => ({
-  //         timestamp,
-  //         ...rawData[timestamp]
-  //       }));
-  //       console.log(transformedData)
-  //       setData(transformedData); // Now TypeScript knows this is of type TransformedData[]
-  //     } catch (error) {
-  //       console.error("There was a problem with the fetch operation:", error);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, []);
-
-  // if (loading) return <div className="loader">Loading...</div>; //replace this for loader
+    setShowContent(!isLoading);
+  }, [isLoading]);
 
   return (
     <>
@@ -370,11 +324,13 @@ const Dashboard = () => {
                   <CardContent className=" grid gap-4">
                     <p className="font-semibold text-sm">
                       Compressor running duration load :{" "}
-                      {derivedData.compressorLoad.toFixed(2)}
+                      {derivedData ? derivedData.compressorLoad.toFixed(2) : 0}
                     </p>
                     <p className="font-semibold text-sm">
                       Compressor running duration unload :{" "}
-                      {derivedData.compressorUnload.toFixed(2)}
+                      {derivedData
+                        ? derivedData.compressorUnload.toFixed(2)
+                        : 0}
                     </p>
                   </CardContent>
                 </Card>
@@ -382,11 +338,12 @@ const Dashboard = () => {
                   <br />
                   <CardContent className="grid gap-4">
                     <p className="font-semibold text-sm">
-                      Oil filter condition : {derivedData.oilFilterCondition}
+                      Oil filter condition :{" "}
+                      {derivedData ? derivedData.oilFilterCondition : 0}
                     </p>
                     <p className="font-semibold text-sm">
                       Oil temperature condition :{" "}
-                      {derivedData.oilTemperatureCondition}
+                      {derivedData ? derivedData.oilTemperatureCondition : 0}
                     </p>
                   </CardContent>
                 </Card>
@@ -394,10 +351,12 @@ const Dashboard = () => {
                   <br />
                   <CardContent className="grid gap-4">
                     <p className="font-semibold text-sm">
-                      Air filter condition : {derivedData.airFilterCondition}
+                      Air filter condition :{" "}
+                      {derivedData ? derivedData.airFilterCondition : 0}
                     </p>
                     <p className="font-semibold text-sm">
-                      Drain duration : {derivedData.drainDuration.toFixed(2)}
+                      Drain duration :{" "}
+                      {derivedData ? derivedData.drainDuration.toFixed(2) : 0}
                     </p>
                   </CardContent>
                 </Card>

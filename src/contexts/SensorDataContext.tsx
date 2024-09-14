@@ -9,18 +9,21 @@ import {
 } from "react";
 // import {  } from "firebase/database";
 
+type RawData = {
+  airFilterVaccumPressure: number;
+  currentSensor: number;
+  dischargePressureSensor: number;
+  drainValvePressureOutlet: number;
+  machine: number;
+  oilPressureInlet: number;
+  oilPressureOutlet: number;
+  oilTemperatureSensor: number;
+  voltageSensor: number;
+  timestamp: string;
+};
+
 interface SensorData {
-  [key: string]: {
-    airFilterVaccumPressure: number;
-    currentSensor: number;
-    dischargePressureSensor: number;
-    drainValvePressureOutlet: number;
-    machine: number;
-    oilPressureInlet: number;
-    oilPressureOutlet: number;
-    oilTemperatureSensor: number;
-    voltageSensor: number;
-  };
+  [key: string]: RawData;
 }
 
 interface ChartData24hrs {
@@ -40,12 +43,11 @@ interface ChartData24hrs {
 }
 
 interface TransformedDataType {
-  timestamp: string;
+  time: number;
   airFilterVaccumPressure: number;
   currentSensor: number;
   dischargePressureSensor: number;
   drainValvePressureOutlet: number;
-  machine: number;
   oilPressureInlet: number;
   oilPressureOutlet: number;
   oilTemperatureSensor: number;
@@ -261,7 +263,7 @@ const DUMMY_DATA = [
 const chartData24hrs: ChartData24hrs[] = [];
 const chartData10days = [];
 
-function aggregateDataByHour(Data: TransformedDataType[]) {
+function aggregateDataByHour(Data: RawData[]): TransformedDataType[] {
   const result: { [hour: number]: ChartData24hrs } = {};
   let previousTime = 0,
     currentTime,
@@ -338,24 +340,36 @@ export const SensorDataContext = createContext<
 export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("NO_ERROR");
+  /** `data` contains the transformed data */
   const [data, setData] = useState<TransformedDataType[] | undefined>();
   const [chartData, setChartData] = useState<ChartData24hrs[] | undefined>();
+  /** `derviedData` contains data that was derived using formulae */
   const [derivedData, setDerivedData] = useState<DerivedDataType | undefined>();
 
-  /** Useffect for live data subscription */
+  /** Useffect for live data subscription:
+   * 1. subscribes to RTDB
+   * 2. Transforms data as required
+   */
   useEffect(() => {
     const unSub = onValue(
       ref(db, "indo_logs"),
       (piece) => {
-        const sensorData = Object.keys(piece.toJSON() as SensorData).map(
-          (k) => ({
-            timestamp: k,
-            // @ts-ignore
-            ...piece[k],
-          }),
-        ) as TransformedDataType[];
+        // Retrieveing raw RTDB data
+        const rawData = piece.toJSON() as SensorData;
+
+        // Converting key value pairs to actual arrays
+        const sensorData = Object.keys(rawData).map((k) => ({
+          ...rawData[k],
+          timestamp: k,
+        })) as RawData[];
+        console.log("🚀 ~ useEffect ~ sensorData:", sensorData);
+
+        // Transforming data as required
         const transformedData = aggregateDataByHour(sensorData);
-        console.log(transformedData);
+        console.log("🚀 ~ useEffect ~ transformedData:", transformedData);
+
+        setIsLoading(false);
+        setData(transformedData);
       },
       (error) => {
         setError(error.message);
@@ -365,7 +379,7 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
     return () => unSub();
   }, []);
 
-  /** Useffect for data transformation/aggregation */
+  /** Useffect for calculatin derived data */
   useEffect(() => {
     function createDerivedData() {
       const power =

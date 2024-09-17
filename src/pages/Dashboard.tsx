@@ -228,16 +228,17 @@ const label = [
 ];
 // Chart configuration
 const chartColors = [
-  "#FF5763",
-  "#33FF57",
-  "#3357FF",
+  "#FF0000",
+  // "#FF8700",
+  "#FFD300",
   "#FF33B1",
-  "#A133FF",
-  "#33FFA1",
-  "#FF3C33",
-  "#33FF8C",
-  "#8C33F0",
-  "#F9338C",
+  // "#DEFF0A",
+  // "#33FFA1",
+  "#e0aaff",
+  "#A1FF0A",
+  "#0AEFFF",
+  "#344e41",
+  "#BE0AFF",
 ];
 const chartConfig = {} satisfies ChartConfig;
 

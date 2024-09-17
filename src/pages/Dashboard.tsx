@@ -314,11 +314,10 @@ const Dashboard = () => {
                             ]
                           : "Loading..."}
                           {label[index].label=="Energy"?
-                            transformedData
-                            ? transformedData.at(-1)?.energy:0
+                            derivedData ? derivedData.energy.toFixed(2) : 0
                             :""}
                           {label[index].label=="Power"?
-                            transformedData? transformedData.at(-1)?.power:0
+                            derivedData ? derivedData.power.toFixed(2) : 0
                             :""}
                       </h1>
                       {/* {(data.at(-1).something === somevalue)? <p>display smth</p>: <p>smth else</p>} */}

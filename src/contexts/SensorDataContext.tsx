@@ -425,17 +425,8 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
   /** Useffect for calculatin derived data */
   useEffect(() => {
     function createDerivedData() {
-      const power =
-        (1.732 *
-          (transformedData && transformedData.at(-1)
-            ? transformedData.at(-1)!.voltageSensor
-            : 0) *
-          (transformedData && transformedData.at(-1)
-            ? transformedData.at(-1)!.currentSensor
-            : 0) *
-          0.8) /
-        1000;
-      const energy = 0;
+      const power =transformedData ? transformedData.at(-1)!.power: 0;
+      const energy = transformedData ? transformedData.at(-1)!.energy: 0;
       const compressorLoad = power; // duration
       const compressorUnload = power; // duration kandupudi
       const airFilterCondition = transformedData

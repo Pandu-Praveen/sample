@@ -51,6 +51,8 @@ interface TransformedDataType {
   oilPressureOutlet: number;
   oilTemperatureSensor: number;
   voltageSensor: number;
+  energy: number;
+  power: number;
 }
 
 type DerivedDataType = {

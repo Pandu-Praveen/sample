@@ -269,7 +269,7 @@ const Dashboard = () => {
   useEffect(() => {
     setShowContent(!isLoading);
   }, [isLoading]);
-  console.log(derivedData,data,transformedData);
+  console.log(derivedData,"data:",data,transformedData);
   return (
     <>
       {!showContent ? (
@@ -313,6 +313,13 @@ const Dashboard = () => {
                               label[index].key as keyof (typeof data)[0]
                             ]
                           : "Loading..."}
+                          {label[index].label=="Energy"?
+                            transformedData
+                            ? transformedData.at(-1)?.energy:0
+                            :""}
+                          {label[index].label=="Power"?
+                            transformedData? transformedData.at(-1)?.power:0
+                            :""}
                       </h1>
                       {/* {(data.at(-1).something === somevalue)? <p>display smth</p>: <p>smth else</p>} */}
                       <p className="text-xs">optimum</p>
@@ -366,24 +373,33 @@ const Dashboard = () => {
                 <br />
                 <CardContent className="grid gap-4">
                   <p className="font-semibold text-sm">
-                    Compressor running duration load :
+                    Compressor running duration load :{" "}
+                    {derivedData ? derivedData.compressorLoad.toFixed(2) : 0}
                   </p>
                   <p className="font-semibold text-sm">
-                    Compressor running duration unload :
+                    Compressor running duration unload :{" "}
+                    {derivedData
+                        ? derivedData.compressorUnload.toFixed(2)
+                        : 0}
                   </p>
                   <p className="font-semibold text-sm">
-                    Oil filter condition :
+                    Oil filter condition :{" "}
+                    {derivedData ? derivedData.oilFilterCondition : 0}
+                  </p>
+                  {/* <p className="font-semibold text-sm">
+                    Oil temperature sensor :{" "}
+                  </p> */}
+                  <p className="font-semibold text-sm">
+                    Oil temperature condition :{" "}
+                    {derivedData ? derivedData.oilTemperatureCondition : 0}
                   </p>
                   <p className="font-semibold text-sm">
-                    Oil temperature sensor :
+                    Air filter condition :{" "}
+                    {derivedData ? derivedData.airFilterCondition : 0}
                   </p>
-                  <p className="font-semibold text-sm">
-                    Oil temperature condition :
+                  <p className="font-semibold text-sm">Drain duration :{" "}
+                    {derivedData ? derivedData.drainDuration.toFixed(2) : 0}
                   </p>
-                  <p className="font-semibold text-sm">
-                    Air filter condition :
-                  </p>
-                  <p className="font-semibold text-sm">Drain duration :</p>
                 </CardContent>
               </Card>
 

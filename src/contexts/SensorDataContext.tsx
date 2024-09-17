@@ -9,7 +9,7 @@ import {
 } from "react";
 
 type RawData = {
-  airFilterVaccumPressure: number;
+  airFilterVacuumPressure: number;
   currentSensor: number;
   dischargePressureSensor: number;
   drainValvePressureOutlet: number;
@@ -36,14 +36,14 @@ interface ChartData24hrs {
   oilPressureInlet: number;
   oilPressureOutlet: number;
   oilTemperatureSensor: number;
-  airFilterVaccumPressure: number;
+  airFilterVacuumPressure: number;
   drainValvePressureOutlet: number;
   count: number;
 }
 
 interface TransformedDataType {
   time: number;
-  airFilterVaccumPressure: number;
+  airFilterVacuumPressure: number;
   currentSensor: number;
   dischargePressureSensor: number;
   drainValvePressureOutlet: number;
@@ -67,7 +67,7 @@ type DerivedDataType = {
 const DUMMY_DATA = [
   {
     timestamp: "2024-08-24 11:11:11",
-    airFilterVaccumPressure: 29.8,
+    airFilterVacuumPressure: 29.8,
     currentSensor: 10,
     dischargePressureSensor: 12.5,
     drainValvePressureOutlet: 0.5,
@@ -79,7 +79,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 12:30:38",
-    airFilterVaccumPressure: 700,
+    airFilterVacuumPressure: 700,
     currentSensor: 56,
     dischargePressureSensor: 577,
     drainValvePressureOutlet: 693,
@@ -91,7 +91,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 12:30:52",
-    airFilterVaccumPressure: 181,
+    airFilterVacuumPressure: 181,
     currentSensor: 32,
     dischargePressureSensor: 522,
     drainValvePressureOutlet: 478,
@@ -103,7 +103,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 12:30:54",
-    airFilterVaccumPressure: 1483,
+    airFilterVacuumPressure: 1483,
     currentSensor: 24,
     dischargePressureSensor: 680,
     drainValvePressureOutlet: 1538,
@@ -115,7 +115,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 12:40:11",
-    airFilterVaccumPressure: 29.8,
+    airFilterVacuumPressure: 29.8,
     currentSensor: 10,
     dischargePressureSensor: 12.5,
     drainValvePressureOutlet: 0.5,
@@ -127,7 +127,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 12:50:38",
-    airFilterVaccumPressure: 700,
+    airFilterVacuumPressure: 700,
     currentSensor: 56,
     dischargePressureSensor: 577,
     drainValvePressureOutlet: 693,
@@ -139,7 +139,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 12:59:52",
-    airFilterVaccumPressure: 181,
+    airFilterVacuumPressure: 181,
     currentSensor: 32,
     dischargePressureSensor: 522,
     drainValvePressureOutlet: 478,
@@ -151,7 +151,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 13:00:54",
-    airFilterVaccumPressure: 1483,
+    airFilterVacuumPressure: 1483,
     currentSensor: 24,
     dischargePressureSensor: 680,
     drainValvePressureOutlet: 1538,
@@ -163,7 +163,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 13:11:11",
-    airFilterVaccumPressure: 29.8,
+    airFilterVacuumPressure: 29.8,
     currentSensor: 10,
     dischargePressureSensor: 12.5,
     drainValvePressureOutlet: 0.5,
@@ -175,7 +175,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 13:20:38",
-    airFilterVaccumPressure: 700,
+    airFilterVacuumPressure: 700,
     currentSensor: 56,
     dischargePressureSensor: 577,
     drainValvePressureOutlet: 693,
@@ -187,7 +187,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 13:30:52",
-    airFilterVaccumPressure: 181,
+    airFilterVacuumPressure: 181,
     currentSensor: 32,
     dischargePressureSensor: 522,
     drainValvePressureOutlet: 478,
@@ -199,7 +199,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 13:50:54",
-    airFilterVaccumPressure: 1483,
+    airFilterVacuumPressure: 1483,
     currentSensor: 24,
     dischargePressureSensor: 680,
     drainValvePressureOutlet: 1538,
@@ -211,7 +211,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 14:00:11",
-    airFilterVaccumPressure: 29.8,
+    airFilterVacuumPressure: 29.8,
     currentSensor: 10,
     dischargePressureSensor: 12.5,
     drainValvePressureOutlet: 0.5,
@@ -223,7 +223,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 14:15:38",
-    airFilterVaccumPressure: 700,
+    airFilterVacuumPressure: 700,
     currentSensor: 56,
     dischargePressureSensor: 577,
     drainValvePressureOutlet: 693,
@@ -234,8 +234,8 @@ const DUMMY_DATA = [
     voltageSensor: 156,
   },
   {
-    timestamp: "2024-08-24 14:30:52",
-    airFilterVaccumPressure: 181,
+    timestamp: "2024-09-14 14:30:52",
+    airFilterVacuumPressure: 181,
     currentSensor: 32,
     dischargePressureSensor: 522,
     drainValvePressureOutlet: 478,
@@ -247,7 +247,7 @@ const DUMMY_DATA = [
   },
   {
     timestamp: "2024-08-24 14:40:54",
-    airFilterVaccumPressure: 1483,
+    airFilterVacuumPressure: 1483,
     currentSensor: 24,
     dischargePressureSensor: 680,
     drainValvePressureOutlet: 1538,
@@ -264,57 +264,93 @@ const chartData10days = [];
 
 function aggregateDataByHour(Data: RawData[]): TransformedDataType[] {
   const result: { [hour: number]: ChartData24hrs } = {};
-  let previousTime = 0,
+  // Get today's date
+  const today = new Date();
+
+  // Set the start of today
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  // Set the start of tomorrow
+  const startOfTomorrow = new Date(startOfToday);
+  startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+  console.log(startOfToday,startOfTomorrow);
+  let previousTime = 0,flag=0,
     currentTime,
     checkPrevTime = false;
   Data.forEach((entry) => {
-    const hour = new Date(entry.timestamp).getHours();
-    if (!result[hour]) {
-      result[hour] = {
-        time: hour,
-        airFilterVaccumPressure: 0,
-        currentSensor: 0,
-        dischargePressureSensor: 0,
-        drainValvePressureOutlet: 0,
-        oilPressureInlet: 0,
-        oilPressureOutlet: 0,
-        oilTemperatureSensor: 0,
-        voltageSensor: 0,
-        power: 0,
-        energy: 0,
-        pressureSensor: 0,
-        count: 0,
-      };
-      checkPrevTime = false;
-    }
-    result[hour].power +=
+    const givenDate = new Date(entry.timestamp.split(" ").join("T"))
+    const hour = (givenDate>=startOfToday && givenDate< startOfTomorrow) ? givenDate.getHours() : -1;
+    console.log(hour)
+    if(hour!=-1){
+      flag=1;
+      if (!result[hour]) {
+        result[hour] = {
+          time: hour,
+          airFilterVacuumPressure: 0,
+          currentSensor: 0,
+          dischargePressureSensor: 0,
+          drainValvePressureOutlet: 0,
+          oilPressureInlet: 0,
+          oilPressureOutlet: 0,
+          oilTemperatureSensor: 0,
+          voltageSensor: 0,
+          power: 0,
+          energy: 0,
+          pressureSensor: 0,
+          count: 0,
+        };
+        checkPrevTime = false;
+      }
+      result[hour].power +=
       (1.732 * entry.voltageSensor * entry.currentSensor * 0.8) / 1000;
-    let elapsedTime = 0;
-    currentTime = new Date(entry.timestamp).getTime();
-    if (checkPrevTime) {
-      elapsedTime = currentTime - previousTime;
-    }
-    previousTime = currentTime;
-    result[hour].energy += (result[hour].power * elapsedTime) / (3600 * 1000);
-    result[hour].airFilterVaccumPressure += entry.airFilterVaccumPressure;
-    result[hour].currentSensor += entry.currentSensor;
-    result[hour].dischargePressureSensor += entry.dischargePressureSensor;
-    result[hour].drainValvePressureOutlet += entry.drainValvePressureOutlet;
-    result[hour].oilPressureInlet += entry.oilPressureInlet;
-    result[hour].oilPressureOutlet += entry.oilPressureOutlet;
-    result[hour].oilTemperatureSensor += entry.oilTemperatureSensor;
-    result[hour].voltageSensor += entry.voltageSensor;
-    result[hour].count += 1;
-    checkPrevTime = true;
-  });
+      let elapsedTime = 0;
+      currentTime = new Date(entry.timestamp).getTime();
+      if (checkPrevTime) {
+        elapsedTime = currentTime - previousTime;
+      }
+      previousTime = currentTime;
+      result[hour].energy += (result[hour].power * elapsedTime) / (3600 * 1000);
+      result[hour].airFilterVacuumPressure += entry.airFilterVacuumPressure;
+      result[hour].currentSensor += entry.currentSensor;
+      result[hour].dischargePressureSensor += entry.dischargePressureSensor;
+      result[hour].drainValvePressureOutlet += entry.drainValvePressureOutlet;
+      result[hour].oilPressureInlet += entry.oilPressureInlet;
+      result[hour].oilPressureOutlet += entry.oilPressureOutlet;
+      result[hour].oilTemperatureSensor += entry.oilTemperatureSensor;
+      result[hour].voltageSensor += entry.voltageSensor;
+      result[hour].count += 1;
+      checkPrevTime = true;
+      console.log(entry,result[hour])
+  }
+ 
+});
+if(!flag){
+  result[0] = {
+    time: 0,
+    airFilterVacuumPressure: 0,
+    currentSensor: 0,
+    dischargePressureSensor: 0,
+    drainValvePressureOutlet: 0,
+    oilPressureInlet: 0,
+    oilPressureOutlet: 0,
+    oilTemperatureSensor: 0,
+    voltageSensor: 0,
+    power: 0,
+    energy: 0,
+    pressureSensor: 0,
+    count: 1,
+  };
+  console.log(result);
+  // return result
+}
 
   return Object.values(result).map((hourData) => ({
     time: hourData.time,
-    airFilterVaccumPressure: hourData.airFilterVaccumPressure / hourData.count,
+    airFilterVacuumPressure: hourData.airFilterVacuumPressure / hourData.count,
     currentSensor: hourData.currentSensor / hourData.count,
     dischargePressureSensor: hourData.dischargePressureSensor / hourData.count,
     drainValvePressureOutlet:
-      hourData.drainValvePressureOutlet / hourData.count,
+    hourData.drainValvePressureOutlet / hourData.count,
     oilPressureInlet: hourData.oilPressureInlet / hourData.count,
     oilPressureOutlet: hourData.oilPressureOutlet / hourData.count,
     oilTemperatureSensor: hourData.oilTemperatureSensor / hourData.count,
@@ -401,7 +437,7 @@ export const SensorDataContextProvider = ({ children }: PropsWithChildren) => {
       const compressorLoad = power; // duration
       const compressorUnload = power; // duration kandupudi
       const airFilterCondition = transformedData
-        ? transformedData.at(-1)!.airFilterVaccumPressure <= 0.8
+        ? transformedData.at(-1)!.airFilterVacuumPressure <= 0.8
           ? "BAD"
           : "GOOD"
         : "CALCULATING";
